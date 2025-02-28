@@ -2,146 +2,193 @@
 Repositório do primeiro trabalho individual da disciplina de fundamentos de projeto e análise de algoritmos
 
 
-# Projeto CyclomaticComplex
+# Algoritmo de Karatsuba (Python)
+> [Implementação em Rust](karatsuba_rust/README.md)
 
-## Sobre o Projeto
+O **algoritmo de Karatsuba** é um método eficiente para multiplicar números grandes, reduzindo o número de operações necessárias em comparação com o método tradicional de multiplicação. Ele foi desenvolvido por Anatolii Alexeevitch Karatsuba em 1960 e é um exemplo clássico de **divisão e conquista**, uma técnica que divide um problema em subproblemas menores, resolve-os recursivamente e combina os resultados.
 
-O **CyclomaticComplex** é um projeto educativo desenvolvido para analisar a complexidade ciclomática de funções Python e explorar a relação entre a complexidade ciclomática e a notação Big-O. Este projeto utiliza a biblioteca padrão do Python, garantindo que seja simples de rodar e entender, mesmo em ambientes isolados.
+---
 
-## O que é Complexidade Ciclomática?
+## Como Funciona o Algoritmo?
 
-A complexidade ciclomática é uma métrica usada para medir a complexidade do fluxo de controle de um programa. Ela calcula o número de caminhos independentes no código, considerando estruturas como loops (`for`, `while`) e condicionais (`if`, `try/except`). Quanto maior o valor, mais complexo é o código.
+O algoritmo de Karatsuba baseia-se na ideia de que a multiplicação de dois números grandes pode ser simplificada dividindo-os em partes menores e realizando operações mais simples. A seguir, descrevemos os passos principais:
 
-**Fórmula:**  
-\(
-M = E - N + 2P
-\)  
+1. **Divisão dos Números**:
+   - Dados dois números \(x\) e \(y\), cada um é dividido em duas partes de tamanho aproximadamente igual.
+   - Por exemplo, se \(x\) e \(y\) têm \(n\) dígitos, eles são divididos em:
+     \[
+     x = 10^m \cdot x_1 + x_0
+     \]
+     \[
+     y = 10^m \cdot y_1 + y_0
+     \]
+     Onde \(m = \lfloor n/2 \rfloor\), \(x_1\) e \(y_1\) são as partes "altas", e \(x_0\) e \(y_0\) são as partes "baixas".
 
-Onde:  
-- \(M\): Complexidade Ciclomática  
-- \(E\): Número de arestas (transições) no grafo do controle de fluxo  
-- \(N\): Número de nós (blocos de código)  
-- \(P\): Componentes conectados (geralmente 1 para programas simples)  
+2. **Multiplicações Recursivas**:
+   - O algoritmo realiza três multiplicações recursivas:
+     \[
+     z_0 = x_0 \cdot y_0
+     \]
+     \[
+     z_1 = (x_1 + x_0) \cdot (y_1 + y_0)
+     \]
+     \[
+     z_2 = x_1 \cdot y_1
+     \]
 
-## O que é a notação Big-O?
+3. **Combinação dos Resultados**:
+   - O resultado final é obtido combinando as três multiplicações:
+     \[
+     x \cdot y = z_2 \cdot 10^{2m} + (z_1 - z_2 - z_0) \cdot 10^m + z_0
+     \]
 
-A notação Big-O mede como o tempo de execução ou o uso de memória de um algoritmo cresce em relação ao tamanho da entrada. Ela ajuda a prever a escalabilidade do código.
+---
 
-**Diferença para a complexidade ciclomática:**  
-- **Big-O:** Foca no tempo e espaço (eficiência).  
-- **Complexidade Ciclomática:** Foca no número de caminhos possíveis (fluxo de controle).  
+## Vantagens do Algoritmo
 
-Ambas são importantes para entender a qualidade e a eficiência do código.
+- **Redução de Operações**:
+  - O método tradicional de multiplicação requer \(O(n^2)\) operações para multiplicar dois números de \(n\) dígitos.
+  - O Karatsuba reduz isso para \(O(n^{\log_2 3}) \approx O(n^{1.585})\), o que é significativamente mais eficiente para números grandes.
 
-## Sobre as bibliotecas utilizadas
+- **Aplicações**:
+  - É amplamente utilizado em sistemas de computação que lidam com números muito grandes, como criptografia e aritmética de precisão arbitrária.
 
-### `ast`  
-O módulo **`ast`** permite analisar e manipular o código Python em forma de Árvore de Sintaxe Abstrata (AST). Ele é usado neste projeto para identificar estruturas como loops e condicionais.
+---
 
-### `inspect`  
-A biblioteca **`inspect`** permite acessar detalhes do código em tempo de execução. Aqui, é usada para obter o código-fonte das funções para análise.
+## Métodos para Contar Operações
 
-### AST e sua importância no desenvolvimento  
-O AST permite que desenvolvedores criem ferramentas de análise estática de código, linters e otimizadores. Ele é uma representação intermediária poderosa para entender o funcionamento interno do código.
+Para contar as operações no algoritmo de Karatsuba, seguimos os seguintes passos:
 
-## Por que analisar a complexidade ciclomática?  
-Analisar a complexidade ciclomática ajuda a identificar:
-- Código propenso a erros devido à alta complexidade.
-- Funções que precisam de mais testes para garantir cobertura total.
-- Áreas do código que podem ser refatoradas.
+1. **Identificação de Operações**:
+   - Cada operação básica (adição, subtração, multiplicação, divisão, etc.) é contabilizada.
+   - Operações de atribuição e chamadas de função também são consideradas.
 
-## Ambiente virtual
+2. **Análise por Função**:
+   - A função `karatsuba` é analisada linha por linha, contando as operações em cada passo.
+   - Funções auxiliares, como `dividir` e `contar_digitos`, também são incluídas na contagem.
 
-### Passo 1: Criar e ativar o ambiente virtual
+3. **Somatório**:
+   - O total de operações é obtido somando as operações de todas as funções envolvidas.
 
-É recomendável usar um ambiente virtual para gerenciar suas dependências. Siga os passos abaixo para configurar um ambiente virtual:
+---
 
-1. Crie um ambiente virtual usando o seguinte comando:
-    ```bash
-    python3 -m venv .venv
-    ```
+## Cálculo da Complexidade Ciclomática
 
-2. Ative o ambiente virtual:
-    - No macOS e Linux:
-        ```bash
-        source .venv/bin/activate
-        ```
-    - No Windows:
-        ```bash
-        .venv\Scripts\activate
-        ```
+A **complexidade ciclomática** é uma métrica que mede o número de caminhos independentes em um programa. Para calcular a complexidade ciclomática do algoritmo de Karatsuba, utilizamos a seguinte abordagem:
 
-### Passo 2: Executar o script
+1. **Construção do Grafo de Controle de Fluxo**:
+   - O código é representado como um grafo, onde os nós são blocos de código e as arestas são transições entre eles.
+   - Por exemplo, condicionais (`if`) e loops (`while`) criam bifurcações no grafo.
 
-Após ativar o ambiente virtual, execute o script principal:
-```bash
-python main.py
+2. **Aplicação da Fórmula**:
+   - A complexidade ciclomática \(V(G)\) é calculada usando a fórmula:
+     \[
+     V(G) = E - N + 2
+     \]
+     Onde:
+     - \(E\) = número de arestas.
+     - \(N\) = número de nós.
+
+3. **Resultado**:
+   - No caso do algoritmo de Karatsuba, a complexidade ciclomática é **1**, indicando um fluxo de controle simples e direto.
+
+---
+
+## Exemplo de Implementação em Python
+
+[Algoritmo implementado em python](karatsuba_python/main.py)
+
+## Análise do Algoritmo de Karatsuba
+
+### Quantidade de Operações
+
+#### Função `karatsuba(x, y)`:
+- **Total de operações:** 30 operações.
+
+#### Função `dividir(num, m)`:
+- **Total de operações:** 7 operações.
+
+#### Função `max_numero_digitos(x, y)`:
+- **Total de operações:** 5 operações.
+
+#### Função `contar_digitos(num)`:
+- **Caso base (`num == 0`)**: 2 operações.
+- **Caso geral**: 8 + 5 * número de dígitos.
+
+### Complexidade Ciclomática
+
+#### Grafo do algoritmo `karatsuba`:
+- **Nós:** 12
+- **Arestas:** 11
+- **Complexidade ciclomática:** \(V(G) = E - N + 2 = 11 - 12 + 2 = 1\)
+
+### Grafo de Controle de Fluxo
+
+![grafo_karatsuba](img/grafo_python.png)
+
+### Tabela de Operações
+
+A tabela de operações permanece a mesma, mas agora as chamadas recursivas estão claramente representadas no grafo:
+
+| Número | Operação                                                                 |
+|--------|-------------------------------------------------------------------------|
+| 1      | `if x < 10 or y < 10` (2 operações)                                     |
+| 2      | `return x * y` (1 operação)                                             |
+| 3      | `n = max_numero_digitos(x, y)` (1 chamada de função, 1 atribuição)      |
+| 4      | `m = n // 2` (1 operação)                                               |
+| 5      | `alta1, baixa1 = dividir(x, m)` (1 chamada de função, 2 atribuições)    |
+| 6      | `alta2, baixa2 = dividir(y, m)` (1 chamada de função, 2 atribuições)    |
+| 7      | `z0 = karatsuba(baixa1, baixa2)` (1 chamada de função, 1 atribuição)    |
+| 8      | `z1 = karatsuba((baixa1 + alta1), (baixa2 + alta2))` (2 operações, 1 chamada de função, 1 atribuição) |
+| 9      | `z2 = karatsuba(alta1, alta2)` (1 chamada de função, 1 atribuição)      |
+| 10     | `resultado = (z2 * 10 ** (2 * m)) + ((z1 - z2 - z0) * 10 ** m) + z0` (7 operações, 1 atribuição) |
+| 11     | `return resultado` (1 operação)                                         |
+| 12     | `divisor = 10 ** m` (1 operação, 1 atribuição)                         |
+| 13     | `alta = num // divisor` (1 operação, 1 atribuição)                     |
+| 14     | `baixa = num % divisor` (1 operação, 1 atribuição)                     |
+| 15     | `return alta, baixa` (1 operação)                                       |
+| 16     | `x_digitos = contar_digitos(x)` (1 chamada de função, 1 atribuição)     |
+| 17     | `y_digitos = contar_digitos(y)` (1 chamada de função, 1 atribuição)     |
+| 18     | `return max(x_digitos, y_digitos)` (1 operação)                         |
+| 19     | `if num == 0` (1 comparação)                                            |
+| 20     | `return 1` (1 retorno)                                                  |
+| 21     | `contagem = 0` (1 atribuição)                                           |
+| 22     | `n = num` (1 atribuição)                                                |
+| 23     | `while n != 0` (1 comparação)                                           |
+| 24     | `n //= 10` (1 operação, 1 atribuição)                                   |
+| 25     | `contagem += 1` (1 operação, 1 atribuição)                              |
+| 26     | `return contagem` (1 operação de retorno)                               |
+
+## Estrutura do Repositório
+
 ```
-
-## Versão do Python
-
-Este projeto foi desenvolvido na versão **3.13.0** do Python e **não exige a instalação de nenhuma dependência adicional**.
-
-## Explicação das funções
-
-### Arquivo `main.py`
-
-- **`calculate_cyclomatic_complexity(code)`**  
-    Calcula a complexidade ciclomática de um código Python. Percorre a AST para identificar bifurcações no fluxo de controle.
-
-- **`measure_complexity(func)`**  
-    Mede a complexidade ciclomática de uma função específica.
-
-### Arquivo `functions.py`
-
-Este arquivo contém exemplos de funções com diferentes complexidades:
-
-1. **`get_first_element`** (O(1)): Retorna o primeiro elemento de uma lista.  
-2. **`binary_search`** (O(log n)): Realiza busca binária em uma lista ordenada.  
-3. **`linear_search`** (O(n)): Percorre a lista para encontrar um elemento.  
-4. **`sum_list`** (O(n)): Soma os elementos de uma lista.  
-5. **`factorial_iterative`** (O(n)): Calcula o fatorial de forma iterativa.  
-6. **`factorial_recursive`** (O(n)): Calcula o fatorial de forma recursiva.  
-7. **`merge_sort`** (O(n log n)): Ordena uma lista utilizando Merge Sort.  
-8. **`quick_sort`** (O(n log n)): Ordena uma lista utilizando Quick Sort.  
-9. **`bubble_sort`** (O(n²)): Ordena uma lista utilizando Bubble Sort.  
-10. **`fibonacci`** (O(2ⁿ)): Calcula o n-ésimo número de Fibonacci recursivamente.
-
-## Saída da Execução
-
-### Análise da Complexidade Ciclomática por Função
-
-- **Função:** `get_first_element`  
-  **Complexidade Ciclomática:** 2  
-
-- **Função:** `binary_search`  
-  **Complexidade Ciclomática:** 4  
-
-- **Função:** `linear_search`  
-  **Complexidade Ciclomática:** 3  
-
-- **Função:** `sum_list`  
-  **Complexidade Ciclomática:** 2  
-
-- **Função:** `factorial_iterative`  
-  **Complexidade Ciclomática:** 2  
-
-- **Função:** `factorial_recursive`  
-  **Complexidade Ciclomática:** 3  
-
-- **Função:** `merge_sort`  
-  **Complexidade Ciclomática:** 7  
-
-- **Função:** `quick_sort`  
-  **Complexidade Ciclomática:** 2  
-
-- **Função:** `bubble_sort`  
-  **Complexidade Ciclomática:** 4  
-
-- **Função:** `fibonacci`  
-  **Complexidade Ciclomática:** 2  
+├── karatsuba_python
+│   ├── main.py
+│   ├── __pycache__
+│   │   ├── main.cpython-313.pyc
+│   │   └── test_karatsuba.cpython-313-pytest-8.3.4.pyc
+│   ├── requirements.txt
+│   ├── test_karatsuba.py
+│   └── venv
+│       ├── bin
+│       ├── include
+│       ├── lib
+│       ├── lib64 -> lib
+│       └── pyvenv.cfg
+├── karatsuba_rust
+│   ├── Cargo.lock
+│   ├── Cargo.toml
+│   ├── src
+│   │   └── main.rs
+│   └── target
+│       ├── CACHEDIR.TAG
+│       └── debug
+├── README.md
+├── test.sh
+└── Trabalho individual 1 - Valor 5 pontos.pdf
+```
 
 ## Licença
 
 Este projeto está licenciado sob a Licença MIT.
-
+```
