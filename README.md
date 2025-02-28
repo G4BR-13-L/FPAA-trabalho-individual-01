@@ -293,37 +293,3 @@ A tabela de operações permanece a mesma, mas agora as chamadas recursivas est�
 | 24     | `n //= 10` (1 operação, 1 atribuição)                                   |
 | 25     | `contagem += 1` (1 operação, 1 atribuição)                              |
 | 26     | `return contagem` (1 operação de retorno)                               |
-
-## 2.7. Estrutura do Repositório
-
-```
-├── karatsuba_python
-│   ├── main.py
-│   ├── __pycache__
-│   │   ├── main.cpython-313.pyc
-│   │   └── test_karatsuba.cpython-313-pytest-8.3.4.pyc
-│   ├── requirements.txt
-│   ├── test_karatsuba.py
-│   └── venv
-│       ├── bin
-│       ├── include
-│       ├── lib
-│       ├── lib64 -> lib
-│       └── pyvenv.cfg
-├── karatsuba_rust
-│   ├── Cargo.lock
-│   ├── Cargo.toml
-│   ├── src
-│   │   └── main.rs
-│   └── target
-│       ├── CACHEDIR.TAG
-│       └── debug
-├── README.md
-├── test.sh
-└── Trabalho individual 1 - Valor 5 pontos.pdf
-```
-
-## 2.8. Licença
-
-Este projeto está licenciado sob a Licença MIT.
-```
